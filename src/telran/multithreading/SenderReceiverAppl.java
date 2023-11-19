@@ -1,7 +1,5 @@
 package telran.multithreading;
 
-import java.awt.desktop.ScreenSleepEvent;
-
 import telran.multithreading.consumer.Receiver;
 import telran.multithreading.messaging.*;
 import telran.multithreading.producer.Sender;
@@ -24,8 +22,6 @@ public class SenderReceiverAppl {
 		for(Receiver recever : receversArray) {
 			recever.join();
 		}
-//		Thread.sleep(5000);
-//		System.out.println("");
 	}
 
 }

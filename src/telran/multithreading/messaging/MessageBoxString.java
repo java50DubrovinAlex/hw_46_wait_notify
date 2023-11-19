@@ -1,71 +1,51 @@
 package telran.multithreading.messaging;
-
 /**
  * Message box contains only one string
  */
 public class MessageBoxString implements MessageBox{
-	private String message;
 	private volatile boolean isEnd = false;
+	private String message;
 	
 	public boolean isEnd() {
 		return isEnd;
 	}
 
-	private final Object monitor =  new Object(); 
-	
-	
 	public void closeBox() {
 		synchronized (this) {
-			while (this.message != null) {
+			while(this.message != null) {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
-
+					
 				}
-			}
-			isEnd = true;
-			
 		}
-		synchronized (monitor) {
-			//		this.notifyAll();
-			monitor.notifyAll();
+		
+			this.isEnd = true;
+			this.notify();
 		}
 	}
-
-
 	@Override
-	public void put(String message) {
-		synchronized (this) {
-			while (this.message != null) {
-				try {
-					this.wait();
-				} catch (InterruptedException e) {
-
-				}
+	synchronized public void put(String message) {
+		while(this.message  != null) {
+			try {
+				this.wait();
+			} catch (InterruptedException e) {
+				
 			}
-			this.message = message;
 		}
-		synchronized (monitor) {
-			//		this.notifyAll();
-			monitor.notifyAll();
-		}
+		this.message = message;
+		this.notify();
 		
 	}
 
 	@Override
-	public String take() throws InterruptedException {
-		String res;
-		synchronized (monitor) {
-			while (message == null) {
-				monitor.wait();
-			}
-			res = message;
-			message = null;
+	synchronized public String take() throws InterruptedException {
+		while(message == null) {
+			this.wait();
 		}
-		synchronized (this) {
-			//		notifyAll();
-			this.notify();
-		}
+		String res = message;
+		message = null;
+		notifyAll();
 		return res;
 	}
 
@@ -77,6 +57,5 @@ public class MessageBoxString implements MessageBox{
 		notify();
 		return str;
 	}
-
 
 }

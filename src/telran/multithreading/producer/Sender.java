@@ -1,6 +1,5 @@
 package telran.multithreading.producer;
 
-import telran.multithreading.messaging.MessageBox;
 import telran.multithreading.messaging.MessageBoxString;
 
 public class Sender extends Thread {
@@ -16,9 +15,6 @@ public Sender(MessageBoxString messageBox, int nMessages) {
 		  messageBox.put("message" + i);
 		 
   }
-//	 MessageBoxString.isEnd = true;
 	  messageBox.closeBox();
-	  
-	 
   }
 }
